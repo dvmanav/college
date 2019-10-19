@@ -1,4 +1,5 @@
 import React from 'react';
+import FlashMessage from '../flash_message/index';
 class Home extends React.Component {
     render(){
        return (

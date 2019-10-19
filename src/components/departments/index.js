@@ -1,4 +1,5 @@
 import React from 'react';
+import FlashMessage from '../flash_message/index';
 class AllDepartments extends React.Component {
     constructor(props){
         super(props)
@@ -26,16 +27,12 @@ class AllDepartments extends React.Component {
                 error
               });
             })
-        }
+          }
           
-      
-    
-
-      render() {
-        console.log(process.env.REACT_APP_API_URL + "departments?auth=" + process.env.REACT_APP_API_ACCESS_TOKEN);
-        const { error, isLoaded, departments } = this.state;
+    render() {
+        const { error, isLoaded, departments, id, status } = this.state;
         if (error) {
-          return <div>Error: {error.message}</div>;
+          return <FlashMessage message={error.message} color="red"></FlashMessage>;
         } else if (!isLoaded) {
           return <div>Loading...</div>;
         } else {

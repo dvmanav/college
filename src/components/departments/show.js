@@ -1,11 +1,13 @@
 import React from 'react';
+import FlashMessage from '../flash_message/index';
 class Department extends React.Component {
     constructor(props){
         super(props);
+
         var url = new URL(window.location.href);
         var id = url.searchParams.get("id");
 
-        this.state = {error: null, isLoaded: false, department: null, id: id};
+        this.state = {error: null, isLoaded: false, department: null, id: id, status:0};
 
         this.deleteDepartment = this.deleteDepartment.bind(this);
 
@@ -15,7 +17,8 @@ class Department extends React.Component {
     }
     
     componentDidMount() {
-      let id = this.state.id;
+      
+      const { error, isLoaded, departments, id, status } = this.state;      
 
         fetch(process.env.REACT_APP_API_URL + "departments/"+id + '?auth=' + process.env.REACT_APP_API_ACCESS_TOKEN)
           .then(res => res.json())
@@ -24,11 +27,14 @@ class Department extends React.Component {
                 if (result.status.status === 200){
                   this.setState({
                     isLoaded: true,
-                    department: result.status.data
+                    department: result.status.data,
+                    status: result.status.status
                   });
                 } else if(result.status.status === 404){
                   this.setState({
                     isLoaded: true,
+                    status: result.status.status,
+                    department: null
                     //say not found
                   })
                 }
@@ -38,6 +44,8 @@ class Department extends React.Component {
             (error) => {
               this.setState({
                 isLoaded: true,
+                status: 500,
+                department: null,
                 error
               });
             }
@@ -45,12 +53,12 @@ class Department extends React.Component {
         }
 
       render() {
-        const { error, isLoaded, department } = this.state;
+        const { error, isLoaded, department, id, status } = this.state;
         if (error) {
-          return <div>Error: {error.message}</div>;
+          return <FlashMessage message={error.message} color="red"></FlashMessage>;
         } else if (!isLoaded) {
           return <div>Loading...</div>;
-        } else {
+        } else if (department!=null){
           return (
               <div>
               <h1>Department</h1>
@@ -78,6 +86,10 @@ class Department extends React.Component {
             <a href="/departments">All Departments</a>
             </div>
           );
+        } else if (department==null && status == 404){
+          return <FlashMessage message="Department Not Found" color="red"></FlashMessage>
+        } else {
+          return <FlashMessage message="Internal Server Error" color="red"></FlashMessage>
         }
     }
     updateName(event){
@@ -108,16 +120,21 @@ class Department extends React.Component {
         .then(
           (result) => {
               if (result.status.status===200){
+                alert("Department updated!");
                   window.location.href = '/department/?id=' + id;
                   //flash department created
               } else if(result.status.status===500){
                   //say departmnt not updated
+                  alert("Unable to update department");
               }
           },
           
           (error) => {
+            alert("Unable to update department");
             this.setState({
+              
               isLoaded: true,
+              status: 500,
               error
             });
           }
@@ -142,14 +159,17 @@ class Department extends React.Component {
         .then(
           (result) => {
               if (result.status.status===200){
+                alert("Department deleted");
                   window.location.href = '/departments';
                   //flash department deleted
               } else if(result.status.status===500){
+                alert("Unable to delete department");
                   //unable to delete department
               }
           },
           
           (error) => {
+            alert("Unable to delete department " + error.message);
             this.setState({
               isLoaded: true,
               error
