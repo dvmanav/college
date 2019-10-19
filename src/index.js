@@ -15,6 +15,7 @@ import {
     Link
   } from "react-router-dom";
 
+  require('dotenv').config()
 
 const router = (
   <Router>

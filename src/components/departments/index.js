@@ -6,11 +6,13 @@ class AllDepartments extends React.Component {
     }
     
     componentDidMount() {
-        fetch("http://localhost:3001/api/departments?auth=abc")
+        fetch(process.env.REACT_APP_API_URL + "departments?auth=" + process.env.REACT_APP_API_ACCESS_TOKEN)
           .then(res => res.json())
           .then(
             (result) => {
-              if (result.status.status == 200){
+              console.log(process.env.REACT_APP_API_URL + "departments?auth=" + process.env.REACT_APP_API_ACCESS_TOKEN);
+              console.log(result);
+              if (result.status.status === 200){
                 this.setState({
                   isLoaded: true,
                   departments: result.status.data
@@ -23,11 +25,14 @@ class AllDepartments extends React.Component {
                 isLoaded: true,
                 error
               });
-            }
-          )
-      }
+            })
+        }
+          
+      
+    
 
       render() {
+        console.log(process.env.REACT_APP_API_URL + "departments?auth=" + process.env.REACT_APP_API_ACCESS_TOKEN);
         const { error, isLoaded, departments } = this.state;
         if (error) {
           return <div>Error: {error.message}</div>;
@@ -51,7 +56,7 @@ class AllDepartments extends React.Component {
                 <td>{department.id} </td>
                 <td>{department.name}</td>
                 <td>{department.hod_id}</td>
-                <td><a href={"http://localhost:3002/department?id=" + department.id}>Show</a></td>
+                <td><a href={"/department?id=" + department.id}>Show</a></td>
               </tr>
               ))}
             </table>

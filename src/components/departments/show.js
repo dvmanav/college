@@ -17,16 +17,16 @@ class Department extends React.Component {
     componentDidMount() {
       let id = this.state.id;
 
-        fetch("http://localhost:3001/api/departments/"+id+"?auth=abc")
+        fetch(process.env.REACT_APP_API_URL + "departments/"+id + '?auth=' + process.env.REACT_APP_API_ACCESS_TOKEN)
           .then(res => res.json())
           .then(
             (result) => {
-                if (result.status.status == 200){
+                if (result.status.status === 200){
                   this.setState({
                     isLoaded: true,
                     department: result.status.data
                   });
-                } else if(result.status.status == 404){
+                } else if(result.status.status === 404){
                   this.setState({
                     isLoaded: true,
                     //say not found
@@ -42,7 +42,7 @@ class Department extends React.Component {
               });
             }
           )
-      }
+        }
 
       render() {
         const { error, isLoaded, department } = this.state;
@@ -94,10 +94,11 @@ class Department extends React.Component {
 
       } else if(yes){
         let id = this.state.id;
-      fetch('http://localhost:3001/api/departments/'+id+ '?auth=ABC', {
+      fetch(process.env.REACT_APP_API_URL+'departments/'+id, {
             method: 'PATCH',
             headers: {'Content-Type':'application/json'},
             body :JSON.stringify({
+              "auth": process.env.REACT_APP_API_MODIFY_TOKEN,
               "id" : this.state.id,
               "name" : this.state.name,
               "hod_id": this.state.hod_id
@@ -106,10 +107,10 @@ class Department extends React.Component {
         }).then(res => res.json())
         .then(
           (result) => {
-              if (result.status.status==200){
-                  window.location.href = 'http://localhost:3002/department/?id=' + id;
+              if (result.status.status===200){
+                  window.location.href = '/department/?id=' + id;
                   //flash department created
-              } else if(result.status.status==500){
+              } else if(result.status.status===500){
                   //say departmnt not updated
               }
           },
@@ -122,26 +123,28 @@ class Department extends React.Component {
           }
         );
       }
-      
-
     }
 
     deleteDepartment(){
       let yes = window.confirm("Are you sure? Delete?");
-      if (!yes){
-
-      } else if(yes){
-      let id = this.state.id;
-      fetch('http://localhost:3001/api/departments/'+id+ '?auth=ABC', {
-            method: 'DELETE',
-            headers: {'Content-Type':'application/json'}
+      console.log(yes);
+      if(yes){
+      console.log(yes);
+        let id = this.state.id;
+        
+        fetch(process.env.REACT_APP_API_URL + 'departments/'+id, {
+          method: 'DELETE',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({
+            "auth": process.env.REACT_APP_API_MODIFY_TOKEN
+          })
         }).then(res => res.json())
         .then(
           (result) => {
-              if (result.status.status==200){
-                  window.location.href = 'http://localhost:3002/departments'
+              if (result.status.status===200){
+                  window.location.href = '/departments';
                   //flash department deleted
-              } else if(result.status.status==500){
+              } else if(result.status.status===500){
                   //unable to delete department
               }
           },
@@ -153,8 +156,6 @@ class Department extends React.Component {
             });
           }
         );
-      
-
     }
   }
 }

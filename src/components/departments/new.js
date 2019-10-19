@@ -18,8 +18,8 @@ class NewDepartment extends React.Component {
             <div>
                 <h1>New Department</h1>
                 <form onSubmit={(e)=> {this.submitNewDepartmentForm(e)}}>
-                    <input type="text" name="department[name]" id="new_department_name" placeholder="Name" onChange={this.updateName}></input><br/>
-                    <input type="number" name="department[hod_id]" id="new_department_hod_id" placeholder="HOD ID" onChange={this.updateHODID}></input><br/>
+                    <input type="text" id="new_department_name" placeholder="Name" onChange={this.updateName}></input><br/>
+                    <input type="number"id="new_department_hod_id" placeholder="HOD ID" onChange={this.updateHODID}></input><br/>
                     <input type="submit" value="Add"></input>
                 </form>
             </div>
@@ -36,23 +36,25 @@ class NewDepartment extends React.Component {
     }
 
     submitNewDepartmentForm(event){
-        fetch('http://localhost:3001/api/departments?auth=ABC', {
+        event.preventDefault();
+        fetch(process.env.REACT_APP_API_URL + 'departments', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify({
+                "auth": process.env.REACT_APP_API_MODIFY_TOKEN, 
                 "name": this.state.name,
                 "hod_id": this.state.hod_id
            })
         }).then(res => res.json())
         .then(
           (result) => {
-              if (result.status.status==201){
+              if (result.status.status===201){
                   var id = result.status.data.id;
                   window.location.href = 'http://localhost:3002/department?id=' + id;
-              } else if(result.status.status==500){
+              } else if(result.status.status===500){
                   //flash ISE 500
                   
-              } else if(result.status.status==401){
+              } else if(result.status.status===401){
                   //flash invalid api token
               }
           },
