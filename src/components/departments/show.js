@@ -60,14 +60,18 @@ class Department extends React.Component {
                 <th>Name</th>
                 <th>HOD ID</th>
                 <th></th>
-                <th></th>
               </tr>
                 <tr>
+                  <td>{department.id}</td>
+                  <td>{department.name}</td>
+                  <td>{department.hod_id}</td>
+                <td><button onClick={this.deleteDepartment}>Delete</button></td>
+                </tr>
+                <tr>                  
                 <td><input type="number" readOnly="true" value={department.id}/></td>
                 <td><input type="text" placeholder={department.name} onChange={this.updateName}></input></td>
                 <td><input type="number" placeholder={department.hod_id} onChange={this.updateHODID}></input></td>
                 <td><button onClick={this.updateDepartment}>Update</button></td>
-                <td><button onClick={this.deleteDepartment}>Delete</button></td>
               </tr>
             </table>
             <br/><br/>
@@ -85,7 +89,11 @@ class Department extends React.Component {
     }
 
     updateDepartment(){
-      let id = this.state.id;
+      let yes = window.confirm("Are you sure? Update?");
+      if (!yes){
+
+      } else if(yes){
+        let id = this.state.id;
       fetch('http://localhost:3001/api/departments/'+id+ '?auth=ABC', {
             method: 'PATCH',
             headers: {'Content-Type':'application/json'},
@@ -113,10 +121,16 @@ class Department extends React.Component {
             });
           }
         );
+      }
+      
 
     }
 
     deleteDepartment(){
+      let yes = window.confirm("Are you sure? Delete?");
+      if (!yes){
+
+      } else if(yes){
       let id = this.state.id;
       fetch('http://localhost:3001/api/departments/'+id+ '?auth=ABC', {
             method: 'DELETE',
@@ -142,6 +156,7 @@ class Department extends React.Component {
       
 
     }
+  }
 }
 
 export default Department;

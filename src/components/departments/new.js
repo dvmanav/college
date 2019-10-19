@@ -8,7 +8,8 @@ class NewDepartment extends React.Component {
         this.updateName = this.updateName.bind(this);
         this.updateHODID = this.updateHODID.bind(this);
         
-        this.submit = this.submit.bind(this);
+        this.submitNewDepartmentForm = this.submitNewDepartmentForm.bind(this);
+        
 
     }
 
@@ -16,12 +17,16 @@ class NewDepartment extends React.Component {
         return(
             <div>
                 <h1>New Department</h1>
+                <form onSubmit={(e)=> {this.submitNewDepartmentForm(e)}}>
                     <input type="text" name="department[name]" id="new_department_name" placeholder="Name" onChange={this.updateName}></input><br/>
                     <input type="number" name="department[hod_id]" id="new_department_hod_id" placeholder="HOD ID" onChange={this.updateHODID}></input><br/>
-                    <button id="new_department_submit" onClick={this.submit}>Add</button>
+                    <input type="submit" value="Add"></input>
+                </form>
             </div>
         );
     }
+
+   
 
     updateName(event){
         this.setState({name:event.target.value});
@@ -30,7 +35,7 @@ class NewDepartment extends React.Component {
         this.setState({hod_id:event.target.value});
     }
 
-    submit(event){
+    submitNewDepartmentForm(event){
         fetch('http://localhost:3001/api/departments?auth=ABC', {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
