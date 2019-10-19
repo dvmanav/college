@@ -91,7 +91,7 @@ class Department extends React.Component {
         .then(
           (result) => {
               if (result.status.status==200){
-                  window.location.href = 'http://localhost:3000/department/?id=' + id;
+                  window.location.href = 'http://localhost:3002/department/?id=' + id;
               } else if(result.status.status!=201){
                   
               }
@@ -114,7 +114,7 @@ class Department extends React.Component {
         .then(
           (result) => {
               if (result.status.status==200){
-                  window.location.href = 'http://localhost:3000/departments'
+                  window.location.href = 'http://localhost:3002/departments'
               } else if(result.status.status!=201){
                   
               }

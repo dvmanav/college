@@ -40,7 +40,7 @@ class NewDepartment extends React.Component {
           (result) => {
               if (result.status.status==201){
                   var id = result.status.data.id;
-                  window.location.href = 'http://localhost:3001/department?id=' + id;
+                  window.location.href = 'http://localhost:3002/department?id=' + id;
               } else if(result.status.status!=201){
                   
               }
