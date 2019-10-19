@@ -1,10 +1,13 @@
 import React from 'react';
 class NewDepartment extends React.Component {
     constructor(props){
-        super(props)
+        super(props);
+
         this.state = {name: '', hod_id: 0};
+        
         this.updateName = this.updateName.bind(this);
         this.updateHODID = this.updateHODID.bind(this);
+        
         this.submit = this.submit.bind(this);
 
     }
@@ -41,13 +44,16 @@ class NewDepartment extends React.Component {
               if (result.status.status==201){
                   var id = result.status.data.id;
                   window.location.href = 'http://localhost:3002/department?id=' + id;
-              } else if(result.status.status!=201){
+              } else if(result.status.status==500){
+                  //flash ISE 500
                   
+              } else if(result.status.status==401){
+                  //flash invalid api token
               }
           },
           
           (error) => {
-            console.log(error);
+              //handle error
           }
         );
     }

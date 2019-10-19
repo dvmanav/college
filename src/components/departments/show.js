@@ -4,6 +4,7 @@ class Department extends React.Component {
         super(props);
         var url = new URL(window.location.href);
         var id = url.searchParams.get("id");
+
         this.state = {error: null, isLoaded: false, department: null, id: id};
 
         this.deleteDepartment = this.deleteDepartment.bind(this);
@@ -20,11 +21,18 @@ class Department extends React.Component {
           .then(res => res.json())
           .then(
             (result) => {
-                console.log(result.status.data);
-              this.setState({
-                isLoaded: true,
-                department: result.status.data
-              });
+                if (result.status.status == 200){
+                  this.setState({
+                    isLoaded: true,
+                    department: result.status.data
+                  });
+                } else if(result.status.status == 404){
+                  this.setState({
+                    isLoaded: true,
+                    //say not found
+                  })
+                }
+              
             },
             
             (error) => {
@@ -92,14 +100,17 @@ class Department extends React.Component {
           (result) => {
               if (result.status.status==200){
                   window.location.href = 'http://localhost:3002/department/?id=' + id;
-              } else if(result.status.status!=201){
-                  
+                  //flash department created
+              } else if(result.status.status==500){
+                  //say departmnt not updated
               }
           },
           
           (error) => {
-            console.log("errrrrro");
-            console.log(error);
+            this.setState({
+              isLoaded: true,
+              error
+            });
           }
         );
 
@@ -115,13 +126,17 @@ class Department extends React.Component {
           (result) => {
               if (result.status.status==200){
                   window.location.href = 'http://localhost:3002/departments'
-              } else if(result.status.status!=201){
-                  
+                  //flash department deleted
+              } else if(result.status.status==500){
+                  //unable to delete department
               }
           },
           
           (error) => {
-            console.log(error);
+            this.setState({
+              isLoaded: true,
+              error
+            });
           }
         );
       

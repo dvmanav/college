@@ -10,11 +10,12 @@ class AllDepartments extends React.Component {
           .then(res => res.json())
           .then(
             (result) => {
-                console.log(result);
-              this.setState({
-                isLoaded: true,
-                departments: result.status.data
-              });
+              if (result.status.status == 200){
+                this.setState({
+                  isLoaded: true,
+                  departments: result.status.data
+                });
+              }
             },
             
             (error) => {
