@@ -5,14 +5,14 @@ class Home extends React.Component {
     render(){
        return (
         <div>
-            <SearchArea location= "home"></SearchArea>
             <h2>Home</h2>
-            <a href="/login">Login</a>
-            <a href="/signup">Signup</a>
-
+            {
+              localStorage.getItem('user_name')!=null ?
+              <h3>Welcome localStorage.getItem('user_name')!</h3> :
+              <h3>Welcome Guest!</h3>
+            }
         </div>
         );
     }
 }
-
 export default Home;

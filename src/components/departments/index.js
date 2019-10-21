@@ -16,13 +16,12 @@ class AllDepartments extends React.Component {
         this.sortByID = this.sortByID.bind(this);
         this.sortByName = this.sortByName.bind(this);
     }
-    
+
     componentDidMount() {
         fetch(process.env.REACT_APP_API_URL + "departments?auth=" + process.env.REACT_APP_API_ACCESS_TOKEN)
           .then(res => res.json())
           .then(
             (result) => {
-              console.log(result);
               if (result.status.status === 200){
                 let departments = [];
 
@@ -45,7 +44,7 @@ class AllDepartments extends React.Component {
                 });
               }
             },
-            
+
             (error) => {
               this.setState({
                 isLoaded: true,
@@ -55,13 +54,12 @@ class AllDepartments extends React.Component {
               });
             })
           }
-          
+
     render() {
         const { error, isLoaded, departments, status, paged_departments, sortByID, sortByName } = this.state;
         if (error) {
           return (<div>
-                    <SearchArea location="departments"></SearchArea><br/>
-                    <FlashMessage message={error.message} color="red"></FlashMessage>;
+                    <FlashMessage message={error.message} color="red"></FlashMessage>
                   </div>
             );
         } else if (!isLoaded) {
@@ -74,7 +72,7 @@ class AllDepartments extends React.Component {
           return (
               <div>
                 <SearchArea location="departments"></SearchArea><br/>
-                
+
                 <h1>All Departments</h1>
                 <a href="/departments_new">Add New Department</a>
 
@@ -88,8 +86,8 @@ class AllDepartments extends React.Component {
                     <th></th>
                   </tr>
 
-                  
-              
+
+
                   {paged_departments.map(department => (
                   <tr>
                     <td>{department.id} </td>
@@ -115,8 +113,8 @@ class AllDepartments extends React.Component {
                   />
               </div>
             );
-          
-          
+
+
         }
     }
 
@@ -144,7 +142,7 @@ class AllDepartments extends React.Component {
       let end = start + 9;
 
       console.log(start + "-" + end);
-  
+
       this.setState({ start: start, end: end, paged_departments: this.state.departments.slice(start, end-1)});
     };
 

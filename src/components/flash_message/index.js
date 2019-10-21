@@ -4,15 +4,15 @@ class FlashMessage extends React.Component {
         super(props);
         this.state = {message:this.props.message, color: this.props.color, hidden:false};
     }
-    
+
     render(){
         const {message, color, hidden} = this.state;
-        if(hidden){
+        if(hidden || message==""){
             return (
                 <div></div>
             );
 
-        } else if(!hidden){
+        } else if(!hidden && message!=""){
             return (
                 <div>
                    <p style={{backgroundColor:color}}>{message}</p>
@@ -20,7 +20,7 @@ class FlashMessage extends React.Component {
                 </div>
                 );
         }
-       
+
     }
 }
 export default FlashMessage;
