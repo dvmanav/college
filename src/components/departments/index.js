@@ -1,10 +1,15 @@
 import React from 'react';
+import Search from 'react-search'
+import ReactPaginate from 'react-paginate';
+
 import FlashMessage from '../flash_message/index';
 import SearchArea from '../search_area';
+
 class AllDepartments extends React.Component {
     constructor(props){
         super(props)
-        this.state = {error: null, isLoaded: false, departments: []};
+        this.state = {error: null, isLoaded: false, departments: [], start: 0, end: 9 ,status:0, paged_departments: []
+        };
     }
     
     componentDidMount() {
@@ -12,10 +17,16 @@ class AllDepartments extends React.Component {
           .then(res => res.json())
           .then(
             (result) => {
+              console.log(result.status.data.slice(0,10));
               if (result.status.status === 200){
+                let departments_length = result.status.data.length;
                 this.setState({
+                  status: 200,
                   isLoaded: true,
-                  departments: result.status.data
+                  start: 0,
+                  end: 9,
+                  departments: result.status.data,
+                  paged_departments: result.status.data.slice(0,10)
                 });
               }
             },
@@ -29,7 +40,7 @@ class AllDepartments extends React.Component {
           }
           
     render() {
-        const { error, isLoaded, departments, id, status } = this.state;
+        const { error, isLoaded, departments, status, paged_departments } = this.state;
         if (error) {
           return (<div>
                     <SearchArea location="departments"></SearchArea><br/>
@@ -42,7 +53,7 @@ class AllDepartments extends React.Component {
                     Loading...
                   </div>
            );
-        } else {
+        } else if (status===200){
           return (
               <div>
                 <SearchArea location="departments"></SearchArea><br/>
@@ -57,7 +68,7 @@ class AllDepartments extends React.Component {
                     <th></th>
                   </tr>
               
-                  {departments.map(department => (
+                  {paged_departments.map(department => (
                   <tr>
                     <td>{department.id} </td>
                     <td>{department.name}</td>
@@ -66,10 +77,32 @@ class AllDepartments extends React.Component {
                   </tr>
                     ))}
                 </table>
+                <ReactPaginate
+                  previousLabel={'Previous'}
+                  nextLabel={'Next'}
+                  breakLabel={'...'}
+                  breakClassName={'break-me'}
+                  pageCount={this.state.end - this.state.start  + 1}
+                  marginPagesDisplayed={2}
+                  pageRangeDisplayed={5}
+                  onPageChange={this.handlePageClick}
+                  containerClassName={'pagination'}
+                  subContainerClassName={'pages pagination'}
+                  activeClassName={'active'}
+                  />
               </div>
             );
         }
     }
+
+    handlePageClick = data => {
+      let selected = data.selected;
+
+      let start = Math.ceil(selected * 10);
+      let end = start + 9;
+  
+      this.setState({ start: start, end: end, paged_departments: this.state.departments.slice(start, end-1)});
+    };
 }
 
 export default AllDepartments;

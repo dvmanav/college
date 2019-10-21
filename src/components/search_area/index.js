@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types'
 class SearchArea extends React.Component {
     constructor(props){
         super(props);
@@ -66,6 +67,12 @@ class SearchArea extends React.Component {
               })
         
     }
+
+   
 }
+
+SearchArea.propTypes = {
+    location: PropTypes.string.isRequired
+  }
 
 export default SearchArea;
