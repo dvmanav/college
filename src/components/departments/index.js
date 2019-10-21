@@ -17,16 +17,23 @@ class AllDepartments extends React.Component {
           .then(res => res.json())
           .then(
             (result) => {
-              console.log(result.status.data.slice(0,10));
               if (result.status.status === 200){
-                let departments_length = result.status.data.length;
+                let departments = [];
+
+                for( var i=0; i< result.status.data.length; i++){
+                  departments[i] = {id: result.status.data[i].id,
+                                    value: result.status.data[i].name,
+                                  hod_id : result.status.data[i].hod_id
+                                };
+                }
+
                 this.setState({
                   status: 200,
                   isLoaded: true,
                   start: 0,
                   end: 9,
-                  departments: result.status.data,
-                  paged_departments: result.status.data.slice(0,10)
+                  departments: departments,
+                  paged_departments: departments.slice(0,10)
                 });
               }
             },
@@ -60,6 +67,8 @@ class AllDepartments extends React.Component {
                 
                 <h1>All Departments</h1>
                 <a href="/departments_new">Add New Department</a>
+
+                <Search items={departments}  placeholder="Search Departments..." onItemsChanged={this.openDepartment.bind(this)}/>
                 <table>
                   <tr>
                     <th>ID</th>
@@ -71,7 +80,7 @@ class AllDepartments extends React.Component {
                   {paged_departments.map(department => (
                   <tr>
                     <td>{department.id} </td>
-                    <td>{department.name}</td>
+                    <td>{department.value}</td>
                     <td>{department.hod_id}</td>
                     <td><a href={"/department?id=" + department.id}>Show</a></td>
                   </tr>
@@ -103,6 +112,10 @@ class AllDepartments extends React.Component {
   
       this.setState({ start: start, end: end, paged_departments: this.state.departments.slice(start, end-1)});
     };
+
+    openDepartment(departments){
+      console.log(departments[0]);
+    }
 }
 
 export default AllDepartments;
