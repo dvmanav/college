@@ -22,6 +22,7 @@ class AllDepartments extends React.Component {
           .then(res => res.json())
           .then(
             (result) => {
+              console.log(result);
               if (result.status.status === 200){
                 let departments = [];
 
@@ -121,9 +122,9 @@ class AllDepartments extends React.Component {
 
     sortByID(){
       if(!this.state.sortByID){
-        this.state.departments.sort((a, b) => (b.id > a.id) ? 1 : ((a.id > b.id) ? -1 : 0));
+        this.state.departments.sort((a, b) => (b.id > a.id));
       } else{
-      this.state.departments.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+      this.state.departments.sort((a, b) => (a.id > b.id));
       }
       this.setState({ paged_departments: this.state.departments.slice(this.state.start, this.state.end-1), sortByID: !this.state.sortByID});
     }

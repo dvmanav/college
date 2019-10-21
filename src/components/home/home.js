@@ -7,6 +7,9 @@ class Home extends React.Component {
         <div>
             <SearchArea location= "home"></SearchArea>
             <h2>Home</h2>
+            <a href="/login">Login</a>
+            <a href="/signup">Signup</a>
+
         </div>
         );
     }

@@ -9,6 +9,9 @@ import AllDepartments from './components/departments/index';
 import Department from './components/departments/show';
 import NewDepartment from './components/departments/new';
 
+import Login from './components/login';
+import Signup from './components/signup';
+
 import {
     BrowserRouter as Router,
     Switch,
@@ -31,6 +34,9 @@ const router = (
         <li>
           <Link to="/departments">Departments</Link>
         </li>
+        <li>
+          <Link to="/login">Login</Link>
+        </li>
       </ul>
       <Route exact path="/" component={Home} />
       <Route path="/about" component={About} />
@@ -38,6 +44,9 @@ const router = (
       <Route path="/department" component={Department} />
       <Route path="/departments_new" component={NewDepartment} />
       <Route path="/department" component={Department} />
+      <Route path="/login" component={Login}/>
+      <Route path="/signup" component={Signup}/>
+
     </div>
   </Router>
 )
