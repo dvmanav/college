@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 
 import Home from './components/home/home';
 import About from './components/about/about';
+import SearchArea from './components/search_area/index';
 
 import AllDepartments from './components/departments/index';
 import Department from './components/departments/show';
@@ -36,6 +37,7 @@ const router = (
       <Route path="/departments" component={AllDepartments} />
       <Route path="/department" component={Department} />
       <Route path="/departments_new" component={NewDepartment} />
+      
 
     </div>
   </Router>

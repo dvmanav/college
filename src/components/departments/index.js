@@ -1,5 +1,6 @@
 import React from 'react';
 import FlashMessage from '../flash_message/index';
+import SearchArea from '../search_area';
 class AllDepartments extends React.Component {
     constructor(props){
         super(props)
@@ -11,8 +12,6 @@ class AllDepartments extends React.Component {
           .then(res => res.json())
           .then(
             (result) => {
-              console.log(process.env.REACT_APP_API_URL + "departments?auth=" + process.env.REACT_APP_API_ACCESS_TOKEN);
-              console.log(result);
               if (result.status.status === 200){
                 this.setState({
                   isLoaded: true,
@@ -32,33 +31,43 @@ class AllDepartments extends React.Component {
     render() {
         const { error, isLoaded, departments, id, status } = this.state;
         if (error) {
-          return <FlashMessage message={error.message} color="red"></FlashMessage>;
+          return (<div>
+                    <SearchArea location="departments"></SearchArea><br/>
+                    <FlashMessage message={error.message} color="red"></FlashMessage>;
+                  </div>
+            );
         } else if (!isLoaded) {
-          return <div>Loading...</div>;
+          return (<div>
+                    <SearchArea location="departments"></SearchArea><br/>
+                    Loading...
+                  </div>
+           );
         } else {
           return (
               <div>
-              <h1>All Departments</h1>
-              <a href="/departments_new">Add New Department</a>
-            <table>
-              <tr>
-                <th>ID</th>
-                <th>Name</th>
-                <th>HOD ID</th>
-                <th></th>
-              </tr>
+                <SearchArea location="departments"></SearchArea><br/>
+                
+                <h1>All Departments</h1>
+                <a href="/departments_new">Add New Department</a>
+                <table>
+                  <tr>
+                    <th>ID</th>
+                    <th>Name</th>
+                    <th>HOD ID</th>
+                    <th></th>
+                  </tr>
               
-              {departments.map(department => (
-                <tr>
-                <td>{department.id} </td>
-                <td>{department.name}</td>
-                <td>{department.hod_id}</td>
-                <td><a href={"/department?id=" + department.id}>Show</a></td>
-              </tr>
-              ))}
-            </table>
-            </div>
-          );
+                  {departments.map(department => (
+                  <tr>
+                    <td>{department.id} </td>
+                    <td>{department.name}</td>
+                    <td>{department.hod_id}</td>
+                    <td><a href={"/department?id=" + department.id}>Show</a></td>
+                  </tr>
+                    ))}
+                </table>
+              </div>
+            );
         }
     }
 }
