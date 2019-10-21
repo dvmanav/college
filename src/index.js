@@ -37,8 +37,7 @@ const router = (
       <Route path="/departments" component={AllDepartments} />
       <Route path="/department" component={Department} />
       <Route path="/departments_new" component={NewDepartment} />
-      
-
+      <Route path="/department" component={Department} />
     </div>
   </Router>
 )

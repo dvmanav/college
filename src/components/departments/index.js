@@ -5,11 +5,16 @@ import ReactPaginate from 'react-paginate';
 import FlashMessage from '../flash_message/index';
 import SearchArea from '../search_area';
 
+import './style.css'
+
 class AllDepartments extends React.Component {
     constructor(props){
         super(props)
-        this.state = {error: null, isLoaded: false, departments: [], start: 0, end: 9 ,status:0, paged_departments: []
+        this.state = {error: null, isLoaded: false, departments: [], start: 0, end: 9 ,status:0, paged_departments: [], sortByName: false, sortByID:false
         };
+
+        this.sortByID = this.sortByID.bind(this);
+        this.sortByName = this.sortByName.bind(this);
     }
     
     componentDidMount() {
@@ -33,7 +38,9 @@ class AllDepartments extends React.Component {
                   start: 0,
                   end: 9,
                   departments: departments,
-                  paged_departments: departments.slice(0,10)
+                  paged_departments: departments.slice(0,10),
+                  sortByID: true,
+                  sortByName: false
                 });
               }
             },
@@ -41,13 +48,15 @@ class AllDepartments extends React.Component {
             (error) => {
               this.setState({
                 isLoaded: true,
+                sortByName:false,
+                sortByID:false,
                 error
               });
             })
           }
           
     render() {
-        const { error, isLoaded, departments, status, paged_departments } = this.state;
+        const { error, isLoaded, departments, status, paged_departments, sortByID, sortByName } = this.state;
         if (error) {
           return (<div>
                     <SearchArea location="departments"></SearchArea><br/>
@@ -60,7 +69,7 @@ class AllDepartments extends React.Component {
                     Loading...
                   </div>
            );
-        } else if (status===200){
+        } else if (status===200) {
           return (
               <div>
                 <SearchArea location="departments"></SearchArea><br/>
@@ -70,12 +79,15 @@ class AllDepartments extends React.Component {
 
                 <Search items={departments}  placeholder="Search Departments..." onItemsChanged={this.openDepartment.bind(this)}/>
                 <table>
+                  <tbody>
                   <tr>
-                    <th>ID</th>
-                    <th>Name</th>
+                    <th onClick={this.sortByID}>ID</th>
+                    <th onClick={this.sortByName}>Name</th>
                     <th>HOD ID</th>
                     <th></th>
                   </tr>
+
+                  
               
                   {paged_departments.map(department => (
                   <tr>
@@ -85,13 +97,14 @@ class AllDepartments extends React.Component {
                     <td><a href={"/department?id=" + department.id}>Show</a></td>
                   </tr>
                     ))}
+                    </tbody>
                 </table>
-                <ReactPaginate
+                <ReactPaginate id="pagination_links"
                   previousLabel={'Previous'}
                   nextLabel={'Next'}
                   breakLabel={'...'}
                   breakClassName={'break-me'}
-                  pageCount={this.state.end - this.state.start  + 1}
+                  pageCount={this.state.end - this.state.start + 1}
                   marginPagesDisplayed={2}
                   pageRangeDisplayed={5}
                   onPageChange={this.handlePageClick}
@@ -101,7 +114,26 @@ class AllDepartments extends React.Component {
                   />
               </div>
             );
+          
+          
         }
+    }
+
+    sortByID(){
+      if(!this.state.sortByID){
+        this.state.departments.sort((a, b) => (b.id > a.id) ? 1 : ((a.id > b.id) ? -1 : 0));
+      } else{
+      this.state.departments.sort((a, b) => (a.id > b.id) ? 1 : ((b.id > a.id) ? -1 : 0));
+      }
+      this.setState({ paged_departments: this.state.departments.slice(this.state.start, this.state.end-1), sortByID: !this.state.sortByID});
+    }
+    sortByName(){
+      if(this.state.sortByName){
+        this.state.departments.sort((a, b) => a.value.localeCompare(b.value));
+      } else{
+      this.state.departments.sort((a, b) => b.value.localeCompare(a.value));
+      }
+      this.setState({ paged_departments: this.state.departments.slice(this.state.start, this.state.end-1), sortByName: !this.state.sortByName});
     }
 
     handlePageClick = data => {
@@ -109,6 +141,8 @@ class AllDepartments extends React.Component {
 
       let start = Math.ceil(selected * 10);
       let end = start + 9;
+
+      console.log(start + "-" + end);
   
       this.setState({ start: start, end: end, paged_departments: this.state.departments.slice(start, end-1)});
     };
