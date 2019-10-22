@@ -1,12 +1,13 @@
 import React from 'react';
 import {
-  BrowserRouter as Router,
-  Switch,
   Route,
+  Redirect,
   Link
 } from "react-router-dom";
 
 import FlashMessage from '../flash_message';
+
+import VerifyOTP from '../verify_otp'
 import Login from '../login';
 
 
@@ -32,10 +33,15 @@ class Signup extends React.Component {
       SignedUp,
       error
     } = this.state;
+    if(SignedUp == "success"){
+      return (
+        <VerifyOTP />
+      );
+    }
     return (
       <div>
       {
-        SignedUp.localeCompare("failed") ?
+        SignedUp == "failed" ?
         <FlashMessage message = {error} color = "red"></FlashMessage> : <div></div>
       }
         <h2> User Signup </h2>
@@ -50,7 +56,7 @@ class Signup extends React.Component {
           <input type="date" name="date_of_birth" onChange={(e) => {this.UpdateUser(e)}} required></input>
           <br /><br />
           <label for="gender">Gender: </label>
-          <input type="radio" name="gender" value="MALE" defaultChecked onChange={(e) => {this.UpdateUser(e)}} name="gender" /> Male
+          <input type="radio" name="gender" value="MALE" onChange={(e) => {this.UpdateUser(e)}} name="gender" /> Male
           <input type="radio" name="gender" value="FEMALE" onChange={(e) => {this.UpdateUser(e)}} name="gender" /> Female
           <br /><br />
           <input type="submit" value="Signup"></input>
@@ -63,44 +69,49 @@ class Signup extends React.Component {
   }
 
   UpdateUser(event) {
-    var key=  event.target.name;
-    var value =event.target.value;
-    console.log(key  + " : "  +value);
+    const {name, value} = event.target;
     this.setState({
       user: {
-        key : value
-      }
-    })
+         ...this.state.user,
+         [name] : value
+       }
+   });
   }
 
   Signup(event) {
     event.preventDefault();
     const {user, SignedUp, error} = this.state;
 
+    console.log(user.email);
+
     fetch(process.env.REACT_APP_NAVEEN_API_URL + '/v1/users', {
         method: 'POST',
+        headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+       'Access-Control-Allow-Origin' : '*',
+       'Access-Control-Allow-Methods' : 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+       'Access-Control-Allow-Headers': '*'
+     },
         body: JSON.stringify({
-          "user[email]": user.email,
-          "user[password]": user.password,
-          "user[name]": user.name,
-          "user[date_of_birth]": user.date_of_birth,
-          "user[gender]": user.gender
+          user: this.state.user,
         })
       }).then(res => res.json())
       .then(
         (result) => {
+          console.log(result);
           if (result.status === 201) {
             this.setState({
               SignedUp: "success",
               error: "",
             });
-            alert("Signup successful");
-            window.location.href = '/login';
+            alert(result.message);
           } else if (result.status != 201) {
             this.setState({
               SignedUp: "failed",
               error: result.message
             });
+            alert(result.message);
           }
         },
         (error) => {
@@ -108,6 +119,7 @@ class Signup extends React.Component {
             Signup: "failed",
             error: error.message
           });
+          alert(error.message);
         }
       )
   }

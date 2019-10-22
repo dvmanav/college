@@ -7,8 +7,8 @@ class Home extends React.Component {
         <div>
             <h2>Home</h2>
             {
-              localStorage.getItem('user_name')!=null ?
-              <h3>Welcome localStorage.getItem('user_name')!</h3> :
+              localStorage.getItem('user_login_token')!=null ?
+              <h3>Welcome logged in user!</h3> :
               <h3>Welcome Guest!</h3>
             }
         </div>

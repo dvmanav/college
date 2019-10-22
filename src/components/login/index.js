@@ -3,26 +3,32 @@ import {
   BrowserRouter as Router,
   Switch,
   Route,
-  Link
+  Link,
+  Redirect
 } from "react-router-dom";
 
 import FlashMessage from '../flash_message';
 import Signup from '../signup';
+import Home from '../home/home';
 
 class Login extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       LoggedIn: false,
-      error: null
+      error: null,
+      user: {
+        email: null,
+        password: null
+      }
     };
-    this.Login = this.Login.bind(this);
   }
   render() {
     const {
       LoggedIn,
       error
     } = this.state;
+
     return (
       <div>
         {
@@ -31,10 +37,10 @@ class Login extends React.Component {
         <div></div>
         }
         <h2>User Login</h2>
-        <form onSubmit={this.Login}>
-          <input type="text" ref="email" placeholder="Email" required></input>
+        <form onSubmit={(e) => {this.Login(e)}}>
+          <input type="text" name="email" placeholder="Email" onChange={(e) => {this.UpdateUser(e)}} required></input>
           <br /><br />
-          <input type="password" ref="password" placeholder="Password" required></input>
+          <input type="password" name="password" placeholder="Password" onChange={(e) => {this.UpdateUser(e)}} required></input>
           <br /><br />
           <input type="submit" value="Login"></input>
           <br /><br />
@@ -45,39 +51,48 @@ class Login extends React.Component {
       </div>
     );
   }
+  UpdateUser(event) {
+    const {name, value} = event.target;
+    this.setState({
+      user: {
+         ...this.state.user,
+         [name] : value
+       }
+   });
+  }
 
   Login(event) {
     event.preventDefault();
+    console.log(this.state.user);
     fetch(process.env.REACT_APP_NAVEEN_API_URL + '/v1/users/sign_in', {
         method: 'POST',
+        headers: {
+       'Accept': 'application/json',
+       'Content-Type': 'application/json',
+       'Access-Control-Allow-Origin' : '*'
+     },
         body: JSON.stringify({
-          "email": this.refs.email.value,
-          "password": this.refs.password.value
+          user: this.state.user
         })
       }).then(res => res.json())
       .then(
         (result) => {
+          console.log(result);
           if (result.status === 200) {
             this.setState({
               LoggedIn: true,
               error: null
             })
-            localStorage.setItem('user_login_token', result.data.token);
-            localStorage.setItem('user_name', result.data.name);
-            localStorage.setItem('user_email', result.data.email);
-            alert("Login successfull!");
-            window.location.href = "/";
-          } else if (result.status === 401) {
+            localStorage.setItem('user_login_token', result.token);
+            alert("success");
+            window.location.href='/';
+          } else if (result.status != 200) {
             this.setState({
               LoggedIn: false,
               error: result.message
             })
+            alert(result.message);
 
-          } else {
-            this.setState({
-              LoggedIn: false,
-              error: result.message
-            })
           }
         },
         (error) => {
@@ -85,7 +100,7 @@ class Login extends React.Component {
             LoggedIn: false,
             error: error.message
           })
-
+          alert(error.message);
         }
       )
   }
