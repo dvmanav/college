@@ -10,6 +10,8 @@ import {
 import FlashMessage from '../flash_message';
 import Signup from '../signup';
 import Home from '../home/home';
+import VerifyOTP from '../verify_otp';
+import ForgotPassword from '../forgot_password';
 
 class Login extends React.Component {
   constructor(props) {
@@ -20,14 +22,25 @@ class Login extends React.Component {
       user: {
         email: null,
         password: null
-      }
+      },
+      OTPverifyPending: false,
+      ForgotPass: false
     };
   }
   render() {
     const {
       LoggedIn,
-      error
+      error,
+      user,
+      OTPverifyPending,
+      ForgotPass
     } = this.state;
+
+    if (OTPverifyPending) {
+      return(
+        <VerifyOTP email={user.email} />
+      );
+    }
 
     return (
       <div>
@@ -44,12 +57,25 @@ class Login extends React.Component {
           <br /><br />
           <input type="submit" value="Login"></input>
           <br /><br />
+          <button onClick={(e) => {this.ShowForgotPassword(e)}}>Forgot Password</button>
+          <br />
           <span>Not signed up? </span>
           <Link to="/signup">Signup</Link>
           <Route path="/signup" component={Signup} />
+          {
+            ForgotPass ?
+            <div><br /><br /><ForgotPassword email={user.email} /></div> : null
+          }
         </form>
       </div>
     );
+  }
+  ShowForgotPassword(e){
+    e.preventDefault();
+
+    this.setState({
+      ForgotPass:true
+    })
   }
   UpdateUser(event) {
     const {name, value} = event.target;
@@ -69,7 +95,9 @@ class Login extends React.Component {
         headers: {
        'Accept': 'application/json',
        'Content-Type': 'application/json',
-       'Access-Control-Allow-Origin' : '*'
+       'Access-Control-Allow-Origin' : '*',
+       'Access-Control-Allow-Methods' : 'GET, POST, PUT, DELETE, PATCH, OPTIONS',
+       'Access-Control-Allow-Headers': '*'
      },
         body: JSON.stringify({
           user: this.state.user
@@ -86,13 +114,19 @@ class Login extends React.Component {
             localStorage.setItem('user_login_token', result.token);
             alert("success");
             window.location.href='/';
-          } else if (result.status != 200) {
+          } else if (result.status === 400) { //change this
             this.setState({
               LoggedIn: false,
-              error: result.message
+              error: result.message,
+              OTPverifyPending: true
             })
             alert(result.message);
-
+          } else if (result.status != 200 && result.status!= 400){ //change this
+            this.setState({
+              LoggedIn: false,
+              error: result.message,
+              OTPverifyPending: false
+            })
           }
         },
         (error) => {
@@ -102,7 +136,7 @@ class Login extends React.Component {
           })
           alert(error.message);
         }
-      )
+      );
   }
 }
 export default Login;

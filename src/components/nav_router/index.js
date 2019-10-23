@@ -16,6 +16,8 @@ import AllDepartments from '../departments/index';
 import Department from '../departments/show';
 import NewDepartment from '../departments/new';
 
+import Account from '../user_account';
+
 
 class NavRouter extends React.Component {
   render() {
@@ -25,7 +27,8 @@ class NavRouter extends React.Component {
       localStorage.getItem('user_login_token') == null ?
 
         <Router>
-          <Link to='/login'>Login</Link>
+        <Link to='/'>Home</Link><br />
+          Please <Link to='/login'>Login</Link> to continue.
           <Route path="/login" component={Login} />
           <Route path="/signup" component={Signup} />
         </Router>
@@ -42,6 +45,9 @@ class NavRouter extends React.Component {
               <li>
                 <button onClick={(e)=>{this.Logout(e)}}>Logout</button>
               </li>
+              <li>
+                <Link to='/account'>My Account</Link>
+              </li>
             </ul>
           </div>
           <Route exact path="/" component={Home} />
@@ -52,6 +58,8 @@ class NavRouter extends React.Component {
           <Route path="/departments" component={AllDepartments} />
           <Route path="/departments_new" component={NewDepartment} />
           <Route path="/department" component={Department} />
+
+          <Router path='/account' component={Account} />
         </Router>
       }
       </div>
