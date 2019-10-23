@@ -9,6 +9,8 @@ import {
 
 import FlashMessage from '../../flash_message';
 
+import Login from '../login';
+
 class VerifyOTP extends React.Component {
 
   constructor(props){
@@ -20,7 +22,7 @@ class VerifyOTP extends React.Component {
     const {OTP, OTPverfied, error, OTPresent, email} = this.state;
     if (OTPverfied){
       return(
-        <Redirect to='/login' />
+        <Login email={email} />
       );
     }
     return(
@@ -35,7 +37,7 @@ class VerifyOTP extends React.Component {
         <FlashMessage message={"OTP is sent on " + email} color="green" /> : null
       }
       <form onSubmit={(e)=>{this.ValidateOTP(e)}}>
-      <input type="email" name="email" required placeholder="Email" onChange={(e) => {this.setState({email:e.target.value})}} />
+      <input type="email" name="email" value={email} required placeholder="Email" onChange={(e) => {this.setState({email:e.target.value})}} />
       <br /><br />
       <input type="number" name="OTP" required placeholder="Enter OTP" onChange={(e) => {this.setState({OTP: e.target.value})}} />
       <br /><br />
@@ -45,7 +47,7 @@ class VerifyOTP extends React.Component {
 
       <form onSubmit={(e) => {this.ResendOTP(e)}}>
       <label>Resend OTP: </label>
-      <input type="email" onChange={(e) => (this.setState({email: e.target.value}))} placeholder="Email" />
+      <input type="email" value={email} onChange={(e) => (this.setState({email: e.target.value}))} placeholder="Email" />
       <br/><br/>
       <input type='submit' value='Resend OTP' />
 
@@ -71,6 +73,7 @@ class VerifyOTP extends React.Component {
     }).then(res => res.json())
     .then(
       (result) => {
+        console.log(result);
         if(result.status===200){
           this.setState({
             OTPresent: true,

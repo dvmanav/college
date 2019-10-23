@@ -1,8 +1,18 @@
 import React from 'react';
 import FlashMessage from '../flash_message';
-import SearchArea from '../search_area';
+import MapContainer from '../map';
+import Calendar from 'react-calendar';
+
 class Home extends React.Component {
+  constructor(props){
+    super(props);
+      this.state = {
+        error: null
+      };
+    }
+
     render(){
+      const {error} = this.state;
        return (
         <div>
             <h2>Home</h2>

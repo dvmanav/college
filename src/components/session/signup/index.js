@@ -31,11 +31,12 @@ class Signup extends React.Component {
   render() {
     const {
       SignedUp,
-      error
+      error,
+      user
     } = this.state;
     if(SignedUp == "success"){
       return (
-        <VerifyOTP />
+        <VerifyOTP email={user.email}/>
       );
     }
     return (
@@ -81,6 +82,8 @@ class Signup extends React.Component {
   Signup(event) {
     event.preventDefault();
     const {user, SignedUp, error} = this.state;
+
+    console.log(process.env.REACT_APP_NAVEEN_API_URL + '/v1/users');
 
 
     fetch(process.env.REACT_APP_NAVEEN_API_URL + '/v1/users', {

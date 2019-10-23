@@ -16,6 +16,8 @@ import AllDepartments from '../departments/index';
 import Department from '../departments/show';
 import NewDepartment from '../departments/new';
 
+import Articles from '../articles'
+
 import Account from '../session/user_account';
 
 
@@ -31,6 +33,7 @@ class NavRouter extends React.Component {
           Please <Link to='/login'>Login</Link> to continue.
           <Route exect path="/login" component={Login} />
           <Route exect path="/signup" component={Signup} />
+
         </Router>
        :
         <Router>
@@ -41,6 +44,9 @@ class NavRouter extends React.Component {
               </li>
               <li>
                 <Link to="/departments">Departments</Link>
+              </li>
+              <li>
+                <Link to="/articles">Articles</Link>
               </li>
               <li>
                 <Link to='/account'>My Account</Link>
@@ -58,6 +64,8 @@ class NavRouter extends React.Component {
           <Route exact path="/departments" component={AllDepartments} />
           <Route exact path="/departments/new" component={NewDepartment} />
           <Route exect path="/department" component={Department} />
+
+          <Router exect path='/articles' component={Articles} />
 
           <Router exect path='/account' component={Account} />
         </Router>

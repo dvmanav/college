@@ -20,7 +20,7 @@ class Login extends React.Component {
       LoggedIn: false,
       error: null,
       user: {
-        email: null,
+        email: props.email,
         password: null
       },
       OTPverifyPending: false,
@@ -51,7 +51,7 @@ class Login extends React.Component {
         }
         <h2>User Login</h2>
         <form onSubmit={(e) => {this.Login(e)}}>
-          <input type="text" name="email" placeholder="Email" onChange={(e) => {this.UpdateUser(e)}} required></input>
+          <input type="text" name="email" value={user.email} placeholder="Email" onChange={(e) => {this.UpdateUser(e)}} required></input>
           <br /><br />
           <input type="password" name="password" placeholder="Password" onChange={(e) => {this.UpdateUser(e)}} required></input>
           <br /><br />
@@ -104,6 +104,7 @@ class Login extends React.Component {
       }).then(res => res.json())
       .then(
         (result) => {
+          
           if (result.status === 200) {
             this.setState({
               LoggedIn: true,
@@ -112,14 +113,14 @@ class Login extends React.Component {
             localStorage.setItem('user_login_token', result.token);
             alert("success");
             window.location.href='/';
-          } else if (result.status === 400) { //change this
+          } else if (result.status === 401) { //change this
             this.setState({
               LoggedIn: false,
               error: result.message,
               OTPverifyPending: true
             })
             alert(result.message);
-          } else if (result.status != 200 && result.status!= 400){ //change this
+          } else if (result.status != 200 && result.status!= 401){ //change this
             this.setState({
               LoggedIn: false,
               error: result.message,

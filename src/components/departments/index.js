@@ -9,7 +9,8 @@ import './style.css'
 
 class AllDepartments extends React.Component {
     constructor(props){
-        super(props)
+        super(props);
+        console.log("d-c");
         this.state = {error: null, isLoaded: false, departments: [], start: 0, end: 9 ,status:0, paged_departments: [], sortByName: false, sortByID:false
         };
 
@@ -56,6 +57,7 @@ class AllDepartments extends React.Component {
           }
 
     render() {
+      console.log("d-r");      
         const { error, isLoaded, departments, status, paged_departments, sortByID, sortByName } = this.state;
         if (error) {
           return (<div>

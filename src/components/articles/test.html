@@ -1,0 +1,13 @@
+<Calendar onChange={this.DateChanged} value={this.state.date} />
+{
+  !fetched && error == null ?
+  <h1>Select date</h1> : null
+}
+{
+  !fetched && error!= null ?
+  <FlashMessage message={error} color="red" /> : null
+}
+{
+  fetched && error == null ?
+  <h1>Fetched!</h1> : null
+}
