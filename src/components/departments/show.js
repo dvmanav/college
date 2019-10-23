@@ -15,10 +15,10 @@ class Department extends React.Component {
         this.updateHODID = this.updateHODID.bind(this);
         this.updateDepartment = this.updateDepartment.bind(this);
     }
-    
+
     componentDidMount() {
-      
-      const { error, isLoaded, departments, id, status } = this.state;      
+
+      const { error, isLoaded, departments, id, status } = this.state;
 
         fetch(process.env.REACT_APP_API_URL + "departments/"+id + '?auth=' + process.env.REACT_APP_API_ACCESS_TOKEN)
           .then(res => res.json())
@@ -38,9 +38,9 @@ class Department extends React.Component {
                     //say not found
                   })
                 }
-              
+
             },
-            
+
             (error) => {
               this.setState({
                 isLoaded: true,
@@ -75,7 +75,7 @@ class Department extends React.Component {
                   <td>{department.hod_id}</td>
                 <td><button onClick={this.deleteDepartment}>Delete</button></td>
                 </tr>
-                <tr>                  
+                <tr>
                 <td><input type="number" readOnly="true" value={department.id}/></td>
                 <td><input type="text" placeholder={department.name} onChange={this.updateName}></input></td>
                 <td><input type="number" placeholder={department.hod_id} onChange={this.updateHODID}></input></td>
@@ -95,7 +95,7 @@ class Department extends React.Component {
     updateName(event){
       this.setState({name:event.target.value});
     }
-    
+
     updateHODID(event){
       this.setState({hod_id:event.target.value});
     }
@@ -128,11 +128,11 @@ class Department extends React.Component {
                   alert("Unable to update department");
               }
           },
-          
+
           (error) => {
             alert("Unable to update department");
             this.setState({
-              
+
               isLoaded: true,
               status: 500,
               error
@@ -144,11 +144,9 @@ class Department extends React.Component {
 
     deleteDepartment(){
       let yes = window.confirm("Are you sure? Delete?");
-      console.log(yes);
       if(yes){
-      console.log(yes);
         let id = this.state.id;
-        
+
         fetch(process.env.REACT_APP_API_URL + 'departments/'+id, {
           method: 'DELETE',
           headers: {'Content-Type':'application/json'},
@@ -167,7 +165,7 @@ class Department extends React.Component {
                   //unable to delete department
               }
           },
-          
+
           (error) => {
             alert("Unable to delete department " + error.message);
             this.setState({

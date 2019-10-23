@@ -17,9 +17,6 @@ class ForgotPassword extends React.Component {
 
   render(){
     const {PasswordReset, error, email} = this.state;
-    // console.log(PasswordReset);
-    // console.log(error);
-    // console.log(email);
     return(
     <div>
     <br /><br />

@@ -82,7 +82,6 @@ class Signup extends React.Component {
     event.preventDefault();
     const {user, SignedUp, error} = this.state;
 
-    console.log(user.email);
 
     fetch(process.env.REACT_APP_NAVEEN_API_URL + '/v1/users', {
         method: 'POST',
@@ -99,7 +98,6 @@ class Signup extends React.Component {
       }).then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
           if (result.status === 201) {
             this.setState({
               SignedUp: "success",

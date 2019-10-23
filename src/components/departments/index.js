@@ -141,13 +141,11 @@ class AllDepartments extends React.Component {
       let start = Math.ceil(selected * 10);
       let end = start + 9;
 
-      console.log(start + "-" + end);
 
       this.setState({ start: start, end: end, paged_departments: this.state.departments.slice(start, end-1)});
     };
 
     openDepartment(departments){
-      console.log(departments[0]);
     }
 }
 

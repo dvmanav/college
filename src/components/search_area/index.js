@@ -49,26 +49,24 @@ class SearchArea extends React.Component {
             })}).then(res => res.json())
             .then(
               (result) => {
-                  console.log(result);
                 if (result.status.status === 200){
-                    console.log(200);
                   this.setState({
                     isLoaded: true,
                     departments: result.status.data
                   });
                 }
               },
-              
+
               (error) => {
                 this.setState({
                   isLoaded: true,
                   error
                 });
               })
-        
+
     }
 
-   
+
 }
 
 SearchArea.propTypes = {

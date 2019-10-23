@@ -89,7 +89,6 @@ class Login extends React.Component {
 
   Login(event) {
     event.preventDefault();
-    console.log(this.state.user);
     fetch(process.env.REACT_APP_NAVEEN_API_URL + '/v1/users/sign_in', {
         method: 'POST',
         headers: {
@@ -105,7 +104,6 @@ class Login extends React.Component {
       }).then(res => res.json())
       .then(
         (result) => {
-          console.log(result);
           if (result.status === 200) {
             this.setState({
               LoggedIn: true,
