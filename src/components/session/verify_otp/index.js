@@ -7,7 +7,7 @@ import {
   Redirect
 } from "react-router-dom";
 
-import FlashMessage from '../flash_message';
+import FlashMessage from '../../flash_message';
 
 class VerifyOTP extends React.Component {
 

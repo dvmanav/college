@@ -9,14 +9,14 @@ import {
 
 import Home from '../home/home';
 
-import Signup from '../signup';
-import Login from '../login';
+import Signup from '../session/signup';
+import Login from '../session/login';
 
 import AllDepartments from '../departments/index';
 import Department from '../departments/show';
 import NewDepartment from '../departments/new';
 
-import Account from '../user_account';
+import Account from '../session/user_account';
 
 
 class NavRouter extends React.Component {
@@ -29,8 +29,8 @@ class NavRouter extends React.Component {
         <Router>
         <Link to='/'>Home</Link><br />
           Please <Link to='/login'>Login</Link> to continue.
-          <Route path="/login" component={Login} />
-          <Route path="/signup" component={Signup} />
+          <Route exect path="/login" component={Login} />
+          <Route exect path="/signup" component={Signup} />
         </Router>
        :
         <Router>
@@ -43,23 +43,23 @@ class NavRouter extends React.Component {
                 <Link to="/departments">Departments</Link>
               </li>
               <li>
-                <button onClick={(e)=>{this.Logout(e)}}>Logout</button>
+                <Link to='/account'>My Account</Link>
               </li>
               <li>
-                <Link to='/account'>My Account</Link>
+                <button onClick={(e)=>{this.Logout(e)}}>Logout</button>
               </li>
             </ul>
           </div>
           <Route exact path="/" component={Home} />
 
-          <Route path="/signup" component={Signup} />
-          <Route path="/login" component={Login} />
+          <Route exect path="/signup" component={Signup} />
+          <Route exect path="/login" component={Login} />
 
-          <Route path="/departments" component={AllDepartments} />
-          <Route path="/departments_new" component={NewDepartment} />
-          <Route path="/department" component={Department} />
+          <Route exact path="/departments" component={AllDepartments} />
+          <Route exact path="/departments/new" component={NewDepartment} />
+          <Route exect path="/department" component={Department} />
 
-          <Router path='/account' component={Account} />
+          <Router exect path='/account' component={Account} />
         </Router>
       }
       </div>

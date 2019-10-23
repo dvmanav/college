@@ -7,11 +7,11 @@ import {
   Redirect
 } from "react-router-dom";
 
-import FlashMessage from '../flash_message';
+import FlashMessage from '../../flash_message';
 import Signup from '../signup';
-import Home from '../home/home';
+import Home from '../../home/home';
 import VerifyOTP from '../verify_otp';
-import ForgotPassword from '../forgot_password';
+import ForgotPassword from './forgot_password';
 
 class Login extends React.Component {
   constructor(props) {

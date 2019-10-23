@@ -5,7 +5,7 @@ import {
   Link
 } from "react-router-dom";
 
-import FlashMessage from '../flash_message';
+import FlashMessage from '../../flash_message';
 
 import VerifyOTP from '../verify_otp'
 import Login from '../login';
